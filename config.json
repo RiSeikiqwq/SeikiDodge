@@ -6,7 +6,8 @@
     "USER_NAME": "Name_in_game"
   },
   "toggles": {
-    "DodgeWhenPartyExit": true
+    "DodgeWhenPartyExit": true,
+    "UserIsInParty": false
   },
   "debug": {}
 }

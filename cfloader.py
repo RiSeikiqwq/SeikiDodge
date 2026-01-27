@@ -4,13 +4,14 @@ import json
 # 注意dict中布尔值True-False，json中布尔值true-false
 DEFAULT_CF = {
   "paths": {
-    "GAME_LOG_PATH": "C:/Users/administrator/.lunarclient/profiles/lunar/1.8/logs/latest.log"
+    "GAME_LOG_PATH": "C:/Users/Administrator/.lunarclient/profiles/lunar/1.8/logs/latest.log"
   },
   "player": {
     "USER_NAME": "Name_in_game"
   },
   "toggles": {
-    "DodgeWhenPartyExit": True
+    "DodgeWhenPartyExit": True,
+    "UserIsInParty": False
   },
   "debug": {}
 }

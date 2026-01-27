@@ -13,6 +13,8 @@ USER_NAME = config['player']['USER_NAME']
 LOG_PATH = config['paths']['GAME_LOG_PATH']
 # 不仅在车队进入时Dodge，在车队集体退出时也触发Dodge，注意在json中填true/false
 DodgeWhenPartyExit = config['toggles']['DodgeWhenPartyExit']
+# 用户本人是否在组队中，若是，则用户加入该秒豁免检测
+UserIsInParty = config['toggles']['UserIsInParty']
 
 
 def main():
@@ -21,8 +23,8 @@ def main():
         with open(LOG_PATH, 'r', encoding="utf-8", errors="ignore") as f:
             # 从日志最新一行读取，要求seek()第二参数为2
             f.seek(0, 2)
+            ts_cache = None
             while True:
-                # print(process.waiting_for_game) 调试用
                 # 监听最新一行日志
                 line = listen.tail_log(LOG_PATH, f, log_buffer)
                 if not line:
@@ -33,7 +35,9 @@ def main():
                 # waiting_for_game=True，进入待命状态
                 if process.waiting_for_game:
                     # 获取时间戳
-                    time_stamp_enter, time_stamp_exit = dodge.get_time(line)
+                    ts_enter_raw, ts_exit_raw, exempt_signal = process.get_time(line, USER_NAME, UserIsInParty)
+                    time_stamp_enter, ts_cache = process.maintain_ts(ts_enter_raw, ts_cache, exempt_signal)
+                    time_stamp_exit, ts_cache = process.maintain_ts(ts_exit_raw, ts_cache, exempt_signal)
                     if not (time_stamp_enter or time_stamp_exit):
                         time.sleep(0.2)
                         continue
