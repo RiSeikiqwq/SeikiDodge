@@ -1,6 +1,3 @@
-# 日志文件路径
-LOG_PATH = r"C:\Users\lizhenyi\.lunarclient\profiles\lunar\1.8\logs\latest.log"
-
 # 缓冲区大小，根据后续需求可调整
 BUFFER_MAX_SIZE = 250
 

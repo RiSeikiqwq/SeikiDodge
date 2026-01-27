@@ -1,14 +1,13 @@
 ## 漏洞修复  
-以`{"server":"minixx","gametype":"BEDWARS","mode":"...","map":"..."}`为待命标识  
-而非`[本玩家] has joined the game`  
-导致在少数情况下车队在server json消息发出前加入，无法识别  
-**已修复**  
+在`dodge.get_time()`中，用户与其他玩家一并视为相同对象，可能导致实际触发所需人数少于设定  
+尤其是当用户自身处在一个party中
 
 ## 待实现功能  
-**配置文件json格式化** 使用json文件存储玩家名、日志路径等设置，读取常量统一在main()实现  
-**AutoQueue** 输入`/lobby`后自动输入`/play bedwars_<mode>`  
+**配置文件json格式化** 缓冲区容量`BUFFER_MAX_SIZE`写入json  
+**AutoRequeue** 输入`/lobby`后自动输入`/play bedwars_<mode>`并作为可开启功能列入json  
 **房间黑名单** 向自定义容量队列`lobby_blocklist`存储近期逃逸的房间号，再次加入时自动逃逸  
-**兼容车队集体退出消息** 车队集体退出消息视作加入，一并触发Dodge **已实现**  
+**多模式支持** 对duos/3s模式的支持  
+**自定义车队人数阈值** 在配置文件中加入自定义车队人数阈值设置，默认值`{'4s':4,'3s':3,'duos':2}`
 
 ## 近期不考虑  
 **对非英文字符和非英文环境的读取支持** 

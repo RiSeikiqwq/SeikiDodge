@@ -1,7 +1,6 @@
 import json
 
-# 玩家用户名，用于进入待命状态，注意大小写敏感
-USER_NAME = 'PirateZY_Li'
+
 # status (bool)
 waiting_for_game = False
 # count players joining or exiting at the same time (dict)
@@ -33,7 +32,7 @@ def parse_json_line(line):
         return None
 
 
-def process_line(line):
+def process_line(line, user_name):
     """
     分析单条日志行，更新waiting_for_game，初始化join_counters
     当<本玩家> has joined，进入待命状态
@@ -41,7 +40,7 @@ def process_line(line):
     :return:
     """
     global waiting_for_game, join_counters
-    if USER_NAME + ' has joined' in line:
+    if user_name + ' has joined' in line:
         waiting_for_game = True
         join_counters.clear()
         exit_counters.clear()

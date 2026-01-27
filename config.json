@@ -1,0 +1,12 @@
+{
+  "paths": {
+    "GAME_LOG_PATH": "C:/Users/Administrator/.lunarclient/profiles/lunar/1.8/logs/latest.log"
+  },
+  "player": {
+    "USER_NAME": "Name_in_game"
+  },
+  "toggles": {
+    "DodgeWhenPartyExit": true
+  },
+  "debug": {}
+}
