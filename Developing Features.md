@@ -1,8 +1,7 @@
 ## 漏洞修复  
 
 ## 待实现功能  
-**配置文件json格式化** 缓冲区容量`BUFFER_MAX_SIZE`写入json  
-**AutoRequeue** 输入`/lobby`后自动输入`/play bedwars_<mode>`并作为可开启功能列入json  
+**配置文件json格式化** 缓冲区容量`BUFFER_MAX_SIZE`写入json   
 **房间黑名单** 向自定义容量队列`lobby_blocklist`存储近期逃逸的房间号，再次加入时自动逃逸  
 **玩家黑名单** 存储拉黑玩家，在排队时该玩家一旦发出消息立即触发逃逸  
 **多模式支持** 对duos/3s模式的支持  

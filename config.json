@@ -6,8 +6,9 @@
     "USER_NAME": "Name_in_game"
   },
   "toggles": {
+    "AutoRequeue": true,
     "DodgeWhenPartyExit": true,
-    "UserIsInParty": false
+    "IsUserInParty": false
   },
   "debug": {}
 }

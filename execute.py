@@ -22,6 +22,31 @@ def dodge_execute():
         return
 
 
+def requeue_execute(queue_json_obj, AutoRequeue = False):
+    """
+    代替玩家自动执行/play bedwars_<mode>
+    :param queue_json_obj: 上一局的游戏信息，存储房间号/模式/地图(dict)
+    :param AutoRequeue: 是否执行Requeue
+    :return:
+    """
+    # pattern: 'BEDWARS_<teams>_<member_num>'
+    raw_current_mode = queue_json_obj.get('mode')
+    requeue_command = 'play ' + raw_current_mode
+    try:
+        if AutoRequeue:
+            time.sleep(0.4)
+            pyautogui.press("/")
+            time.sleep(0.01)
+            pyautogui.write(requeue_command, interval=0.01)
+            time.sleep(0.02)
+            pyautogui.press("enter")
+            return 1
+        else:
+            return
+    except Exception:
+        return
+
+
 def trigger(counters, time_stamp):
     """
     判断同一时刻进入或退出玩家数，判断该时刻是否豁免，满足要求即触发AutoDodge

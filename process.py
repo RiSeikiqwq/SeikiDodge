@@ -37,7 +37,7 @@ def process_line(line, user_name):
     分析单条日志行，更新waiting_for_game，初始化join_counters
     当<本玩家> has joined，进入待命状态
     当进入bedwars大厅，服务器发送大厅json信息，退出待命状态
-    :return:
+    :return json_obj, NeedUpdateObj: 若line为进入的游戏等待厅信息，返回存储该信息的字典json_obj与更新信号，否则返回None, False
     """
     global waiting_for_game, join_counters
     if user_name + ' has joined' in line:
@@ -49,7 +49,7 @@ def process_line(line, user_name):
     if json_obj:
         # 例如 {"server":"minixx","gametype":"BEDWARS","mode":"...","map":"..."}
         if json_obj.get("gametype") == "BEDWARS" and "mode" in json_obj and "map" in json_obj:
-            pass
+            return json_obj, True
         # 例如 {"server":"dynamiclobbyxx","gametype":"BEDWARS","lobbyname":"..."}
         elif json_obj.get("gametype") == "BEDWARS" and "lobbyname" in json_obj:
             # 除初始化作用外，与main()中激活dodge_execute()即退出待命的设计互为补充
@@ -57,6 +57,8 @@ def process_line(line, user_name):
             join_counters.clear()
             exit_counters.clear()
             print("AutoDodge Off Guard")
+            return None, False
+    return None, False
 
 
 class TimeStamp(str):
@@ -77,12 +79,12 @@ class TimeStamp(str):
         return obj
 
 
-def get_time(line, user_name, user_is_in_party):
+def get_time(line, user_name, is_user_in_party):
     """
     从日志每行开头[hh:mm:ss]格式中获取时间戳
     :param user_name: 玩家用户名
     :param line: listen模块监听到的单行日志
-    :param user_is_in_party: 检测用户本人是否在车队中，若是，返回豁免信号，该秒豁免检测
+    :param is_user_in_party: 检测用户本人是否在车队中，若是，返回豁免信号，该秒豁免检测
     :return (ts1, ts2, exempt_signal): 时间戳字符串'hh:mm:ss'，分别向process.join/exit_counters输入键； 豁免信号，向维护缓存的maintain_ts()传参
     """
     try:
@@ -92,7 +94,7 @@ def get_time(line, user_name, user_is_in_party):
             return None, None, False
         # 去掉匹配对象的中括号
         raw_ts = ts_match.group(1)
-        exempt_signal = user_is_in_party and (user_name + ' has joined') in line
+        exempt_signal = is_user_in_party and (user_name + ' has joined') in line
         if 'has joined' in line:
             return raw_ts, None, exempt_signal
         elif 'has quit' in line:
