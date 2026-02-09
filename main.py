@@ -19,6 +19,19 @@ DodgeWhenPartyExit = config['toggles']['DodgeWhenPartyExit']
 IsUserInParty = config['toggles']['IsUserInParty']
 
 
+def handle_trigger(counter_dict, ts, queue_json_obj):
+    """
+    在main()中抽象出execute.trigger及其副作用
+    """
+    # 一旦dodge_execute()激活，立刻退出待命，避免重复/lobby
+    if execute.trigger(counter_dict, ts):
+        process.waiting_for_game = False
+        print("AutoDodge Off Guard")
+        if execute.requeue_execute(queue_json_obj, AutoRequeue):
+            print("AutoRequeue Executed")
+    return
+
+
 def main():
     try:
         log_buffer = deque()
@@ -47,24 +60,11 @@ def main():
                         time.sleep(0.2)
                         continue
                     if time_stamp_enter:
-                        # 与dict.get()相比，setdefault()在time_stamp已存在时不做改动，若尚未存在，则加入该键值对
-                        process.join_counters.setdefault(time_stamp_enter, 0)
-                        # 在相同时间，每加入一位玩家，time_stamp映射的值自增1
-                        process.join_counters[time_stamp_enter] += 1
-                        # 一旦dodge_execute()激活，立刻退出待命，避免重复/lobby
-                        if execute.trigger(process.join_counters, time_stamp_enter):
-                            process.waiting_for_game = False
-                            print("AutoDodge Off Guard")
-                            if execute.requeue_execute(queue_json_obj, AutoRequeue):
-                                print("AutoRequeue Executed")
+                        process.update_counter(process.join_counters, time_stamp_enter)
+                        handle_trigger(process.join_counters, time_stamp_enter, queue_json_obj)
                     elif time_stamp_exit and DodgeWhenPartyExit:
-                        process.exit_counters.setdefault(time_stamp_exit, 0)
-                        process.exit_counters[time_stamp_exit] += 1
-                        if execute.trigger(process.exit_counters, time_stamp_exit):
-                            process.waiting_for_game = False
-                            print("AutoDodge Off Guard")
-                            if execute.requeue_execute(queue_json_obj, AutoRequeue):
-                                print("AutoRequeue Executed")
+                        process.update_counter(process.exit_counters, time_stamp_exit)
+                        handle_trigger(process.exit_counters, time_stamp_exit, queue_json_obj)
     finally:
         f.close()
 

@@ -128,3 +128,17 @@ def maintain_ts(raw, ts_cache, exempt_signal=False):
     # 更新缓存
     ts_cache = ts
     return ts, ts_cache
+
+
+def update_counter(counter_dict, ts):
+    """
+    根据时间戳ts(TimeStamp类型)更新计数字典counter_dict，可能是join字典，也可能是exit字典
+    :param counter_dict: 待更新的join_counters或exit_counters
+    :param ts: TimeStamp类型时间戳，用于向字典插入键
+    :return:
+    """
+    # 与dict.get()相比，setdefault()在ts的内容已存在时不做改动，若尚未存在，则加入该键值对
+    counter_dict.setdefault(ts, 0)
+    # 在相同时间，每加入/退出一位玩家，time_stamp映射的值自增1
+    counter_dict[ts] += 1
+    return
