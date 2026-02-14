@@ -42,6 +42,8 @@ For now only bedwars 4s mode is supported. And the threshold for the number of p
     "USER_NAME": "Your profile name in game(Case sensitive)" # 游戏中的用户名（注意大小写）
   },
   "toggles": {
+    "AutoRequeue": false, # 启用后，触发逃逸后自动重新加入一局新的同模式排队
+    "DodgeWhenEnterRecentQueue": false, # 启用后，加入近期曾加入的排队会自动触发逃逸
     "DodgeWhenPartyExit": true, # 启用后，车队集体退出也会触发自动逃逸
     "UserIsInParty": false # 启用后，加入的第一秒不执行检测与逃逸，如果你在组队中，启用它
   },

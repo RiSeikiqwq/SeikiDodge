@@ -3,10 +3,11 @@
     "GAME_LOG_PATH": "C:/Users/Administrator/.lunarclient/profiles/lunar/1.8/logs/latest.log"
   },
   "player": {
-    "USER_NAME": "Name_in_game"
+    "USER_NAME": "Name_in_Game"
   },
   "toggles": {
-    "AutoRequeue": true,
+    "AutoRequeue": false,
+    "DodgeWhenEnterRecentQueue": false,
     "DodgeWhenPartyExit": true,
     "IsUserInParty": false
   },

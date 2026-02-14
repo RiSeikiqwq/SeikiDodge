@@ -10,7 +10,8 @@ DEFAULT_CF = {
     "USER_NAME": "Name_in_game"
   },
   "toggles": {
-    "AutoRequeue": True,
+    "AutoRequeue": False,
+    "DodgeWhenEnterRecentQueue": False,
     "DodgeWhenPartyExit": True,
     "IsUserInParty": False
   },

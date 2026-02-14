@@ -1,11 +1,15 @@
 import json
 import re
+from collections import deque
+
 
 # status (bool)
 waiting_for_game = False
 # count players joining or exiting at the same time (dict)
 join_counters = {}
 exit_counters = {}
+# record queue lobbies which user has entered recently (deque)
+blocked_server = deque(maxlen=5)
 
 
 def parse_json_line(line):
@@ -59,6 +63,25 @@ def process_line(line, user_name):
             print("AutoDodge Off Guard")
             return None, False
     return None, False
+
+
+def maintain_blocked_server(json_obj: dict, deq: deque):
+    """
+    维护最近加入的排队列表（双端队列）
+    :param json_obj: queue_json_obj，存储了服务器信息
+    :param deq: 待操作的双端队列，存储json_obj['server']
+    :return: 是否触发逃逸的信号
+    """
+    server = json_obj.get('server')
+    if server and (server in deq):
+        deq.remove(server)
+        deq.appendleft(server)
+        return True
+    elif server and (server not in deq):
+        deq.appendleft(server)
+        return False
+    else:
+        return False
 
 
 class TimeStamp(str):
