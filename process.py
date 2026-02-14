@@ -130,7 +130,7 @@ def get_time(line, user_name, is_user_in_party):
         print(f"errors occurred when getting time stamp")
 
 
-def maintain_ts(raw, ts_cache, exempt_signal=False):
+def maintain_ts(raw: str, ts_cache: TimeStamp, exempt_signal=False):
     """
     接受时间戳字符串,返回带exempt属性的TimeStamp类型，检查前一TimeStamp属性以决定新TimeStamp属性；
     若收到豁免信号，则相同时间戳(hash)的TimeStamp.exempt强制为True
@@ -153,7 +153,7 @@ def maintain_ts(raw, ts_cache, exempt_signal=False):
     return ts, ts_cache
 
 
-def update_counter(counter_dict, ts):
+def update_counter(counter_dict: dict, ts: TimeStamp):
     """
     根据时间戳ts(TimeStamp类型)更新计数字典counter_dict，可能是join字典，也可能是exit字典
     :param counter_dict: 待更新的join_counters或exit_counters
