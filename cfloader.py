@@ -14,6 +14,10 @@ DEFAULT_CF = {
     # 玩家用户名，传参process.process_line()，作为进入待命状态信号，大小写敏感
     "USER_NAME": "Name_in_game"
   },
+  "capacities": {
+    # 存储最近排队的双端队列容量，DodgeWhenEnterRecentQueue开启后，最近该次内加入过同一局排队自动执行逃逸
+    "RECENT_QUEUE_RECORD": 5
+  },
   "toggles": {
     # 逃逸后立即加入下一场游戏
     "AutoRequeue": False,
@@ -76,6 +80,7 @@ class ListenCfg:
 class ProcessCfg:
     USER_NAME: str
     IsUserInParty: bool
+    RECENT_QUEUE_RECORD: int
 
 
 @dataclass

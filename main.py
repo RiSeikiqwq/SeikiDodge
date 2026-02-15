@@ -22,7 +22,8 @@ cfg = Config(
     ),
     process=ProcessCfg(
         USER_NAME=config['player']['USER_NAME'],
-        IsUserInParty=config['toggles']['IsUserInParty']
+        IsUserInParty=config['toggles']['IsUserInParty'],
+        RECENT_QUEUE_RECORD=config['capacities']['RECENT_QUEUE_RECORD']
     ),
     execute=ExecuteCfg(
         AutoRequeue=config['toggles']['AutoRequeue']
@@ -99,7 +100,7 @@ def main():
                 if queue_obj_update:
                     queue_json_obj = queue_obj_cache
                     # 记录近期加入的排队，若再次加入且开关打开，执行逃逸操作
-                    if dodge_when_enter_recent_queue and process.maintain_blocked_server(queue_json_obj, process.blocked_server):
+                    if dodge_when_enter_recent_queue and process.maintain_blocked_server(queue_json_obj):
                         handle_recent_server_trigger(queue_json_obj, process.join_counters, process.exit_counters)
                 # waiting_for_game=True，进入待命状态
                 if process.waiting_for_game:

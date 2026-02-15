@@ -3,9 +3,11 @@ import re
 from collections import deque
 
 
-# 待初始化的process配置与容器
+"""待初始化的process配置与容器"""
 user_name = ''
 is_user_in_party = False
+# record queue lobbies which user has entered recently (deque)
+blocked_server = deque()
 # status (bool)
 waiting_for_game = False
 # count players joining or exiting at the same time (dict)
@@ -15,13 +17,10 @@ exit_counters = {}
 
 def init(cfg_process):
     """接收main分发的process配置"""
-    global user_name, is_user_in_party
+    global user_name, is_user_in_party, blocked_server
     user_name = cfg_process.USER_NAME
     is_user_in_party = cfg_process.IsUserInParty
-
-
-# record queue lobbies which user has entered recently (deque)
-blocked_server = deque(maxlen=5)
+    blocked_server = deque(maxlen=cfg_process.RECENT_QUEUE_RECORD)
 
 
 def parse_json_line(line):
@@ -75,20 +74,19 @@ def process_line(line):
     return None, False
 
 
-def maintain_blocked_server(json_obj: dict, deq: deque):
+def maintain_blocked_server(json_obj: dict):
     """
     维护最近加入的排队列表（双端队列）
     :param json_obj: queue_json_obj，存储了服务器信息
-    :param deq: 待操作的双端队列，存储json_obj['server']
     :return: 是否触发逃逸的信号
     """
     server = json_obj.get('server')
-    if server and (server in deq):
-        deq.remove(server)
-        deq.appendleft(server)
+    if server and (server in blocked_server):
+        blocked_server.remove(server)
+        blocked_server.appendleft(server)
         return True
-    elif server and (server not in deq):
-        deq.appendleft(server)
+    elif server and (server not in blocked_server):
+        blocked_server.appendleft(server)
         return False
     else:
         return False

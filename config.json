@@ -5,6 +5,9 @@
   "player": {
     "USER_NAME": "Name_in_game"
   },
+  "capacities": {
+    "RECENT_QUEUE_RECORD": 5
+  },
   "toggles": {
     "AutoRequeue": false,
     "DodgeWhenEnterRecentQueue": false,
