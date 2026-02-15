@@ -41,6 +41,10 @@ For now only bedwars 4s mode is supported. And the threshold for the number of p
   "player": {
     "USER_NAME": "Your profile name in game(Case sensitive)" # 游戏中的用户名（注意大小写）
   },
+  "capacities": {
+    "LISTEN_BUFFER": 250, # 监听缓冲区容量
+    "RECENT_QUEUE_RECORD": 5 # 记录最近加入排队名称的列表容量
+  },
   "toggles": {
     "AutoRequeue": false, # 启用后，触发逃逸后自动重新加入一局新的同模式排队
     "DodgeWhenEnterRecentQueue": false, # 启用后，加入近期曾加入的排队会自动触发逃逸
