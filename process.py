@@ -3,19 +3,29 @@ import re
 from collections import deque
 
 
+# 待初始化的process配置与容器
+user_name = ''
+is_user_in_party = False
 # status (bool)
 waiting_for_game = False
 # count players joining or exiting at the same time (dict)
 join_counters = {}
 exit_counters = {}
+
+
+def init(cfg_process):
+    """接收main分发的process配置"""
+    global user_name, is_user_in_party
+    user_name = cfg_process.USER_NAME
+    is_user_in_party = cfg_process.IsUserInParty
+
+
 # record queue lobbies which user has entered recently (deque)
 blocked_server = deque(maxlen=5)
 
 
 def parse_json_line(line):
-    """
-        尝试将日志行解析为 JSON，返回 dict 或 None
-        """
+    """尝试将日志行解析为 JSON，返回 dict 或 None"""
     try:
         # 定位第一个 "{"
         start = line.find("{")
@@ -36,7 +46,7 @@ def parse_json_line(line):
         return None
 
 
-def process_line(line, user_name):
+def process_line(line):
     """
     分析单条日志行，更新waiting_for_game，初始化join_counters
     当<本玩家> has joined，进入待命状态
@@ -85,9 +95,7 @@ def maintain_blocked_server(json_obj: dict, deq: deque):
 
 
 class TimeStamp(str):
-    """
-    Standard pattern of timestamp fetched from the head of single line of log
-    """
+    """Standard pattern of timestamp fetched from the head of single line of log"""
     def __new__(cls, value, exempt=False):
         """
         TimeStamp是以'hh:mm:ss'为标准格式的字符串，表明单行日志开头的时间戳
@@ -102,12 +110,10 @@ class TimeStamp(str):
         return obj
 
 
-def get_time(line, user_name, is_user_in_party):
+def get_time(line):
     """
     从日志每行开头[hh:mm:ss]格式中获取时间戳
-    :param user_name: 玩家用户名
     :param line: listen模块监听到的单行日志
-    :param is_user_in_party: 检测用户本人是否在车队中，若是，返回豁免信号，该秒豁免检测
     :return (ts1, ts2, exempt_signal): 时间戳字符串'hh:mm:ss'，分别向process.join/exit_counters输入键； 豁免信号，向维护缓存的maintain_ts()传参
     """
     try:

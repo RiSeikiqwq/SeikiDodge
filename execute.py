@@ -2,10 +2,18 @@ import time
 import pyautogui
 
 
+# 待初始化的execute配置
+auto_requeue = False
+
+
+def init(cfg_execute):
+    """接收main分发的execute配置"""
+    global auto_requeue
+    auto_requeue = cfg_execute.AutoRequeue
+
+
 def dodge_execute():
-    """
-    代替玩家在游戏中输入/lobby并按回车
-    """
+    """代替玩家在游戏中输入/lobby并按回车"""
     try:
         # 暂停一下以确保 Minecraft 窗口已经是活动状态
         time.sleep(0.5)
@@ -22,18 +30,17 @@ def dodge_execute():
         return
 
 
-def requeue_execute(queue_json_obj, AutoRequeue = False):
+def requeue_execute(queue_json_obj):
     """
     代替玩家自动执行/play bedwars_<mode>
     :param queue_json_obj: 上一局的游戏信息，存储房间号/模式/地图(dict)
-    :param AutoRequeue: 是否执行Requeue
     :return:
     """
     # pattern: 'BEDWARS_<teams>_<member_num>'
     raw_current_mode = queue_json_obj.get('mode')
     requeue_command = 'play ' + raw_current_mode
     try:
-        if AutoRequeue:
+        if auto_requeue:
             time.sleep(0.4)
             pyautogui.press("/")
             time.sleep(0.01)

@@ -1,18 +1,27 @@
 import json
+from dataclasses import dataclass
 
-
-# 注意dict中布尔值True-False，json中布尔值true-false
+"""
+默认配置，用于在config.json中有缺失时补全
+注意此处为dict，布尔值为True-False对；而json中布尔值为true-false对
+"""
 DEFAULT_CF = {
   "paths": {
+    # minecraft游戏本体日志路径
     "GAME_LOG_PATH": "C:/Users/Administrator/.lunarclient/profiles/lunar/1.8/logs/latest.log"
   },
   "player": {
+    # 玩家用户名，传参process.process_line()，作为进入待命状态信号，大小写敏感
     "USER_NAME": "Name_in_game"
   },
   "toggles": {
+    # 逃逸后立即加入下一场游戏
     "AutoRequeue": False,
+    # 将最近加入的排队列入黑名单，下次加入时自动逃逸
     "DodgeWhenEnterRecentQueue": False,
+    # 不仅在车队进入时Dodge，在车队集体退出时也触发Dodge
     "DodgeWhenPartyExit": True,
+    # 用户本人是否在组队中，若是，则用户加入该秒豁免检测
     "IsUserInParty": False
   },
   "debug": {}
@@ -48,3 +57,35 @@ def loadcf(cfname = "config.json"):
         except json.JSONDecodeError as e:
             raise RuntimeError(f"Invalid Config File: {e}")
     return merge_default_cf(config, DEFAULT_CF)
+
+
+# 定义dataclass装饰的数据类，构建配置对象，缓存配置信息
+@dataclass
+class RuntimeCfg:
+    LOG_PATH: str
+    DodgeWhenEnterRecentQueue: bool
+    DodgeWhenPartyExit: bool
+
+
+@dataclass
+class ListenCfg:
+    pass
+
+
+@dataclass
+class ProcessCfg:
+    USER_NAME: str
+    IsUserInParty: bool
+
+
+@dataclass
+class ExecuteCfg:
+    AutoRequeue: bool
+
+
+@dataclass
+class Config:
+    runtime: RuntimeCfg
+    listen: ListenCfg
+    process: ProcessCfg
+    execute: ExecuteCfg

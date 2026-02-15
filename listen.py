@@ -2,6 +2,10 @@
 BUFFER_MAX_SIZE = 250
 
 
+def init(cfg_listen):
+    pass
+
+
 def tail_log(log_path, file, buffer):
     """
     执行一次监听日志文件新增内容，返回新行
