@@ -1,15 +1,19 @@
-# 缓冲区大小，根据后续需求可调整
-BUFFER_MAX_SIZE = 250
+# 待初始化配置
+buffer_max_size = 0
 
 
 def init(cfg_listen):
-    pass
+    """接收main分发的listen配置"""
+    global buffer_max_size
+    buffer_max_size = cfg_listen.LISTEN_BUFFER
 
 
-def tail_log(log_path, file, buffer):
+def tail_log(log_path: str, file, buffer):
     """
     执行一次监听日志文件新增内容，返回新行
-    :param log_path: 日志文件路径
+    :param buffer: 缓冲区，在main中声明并传入该函数(deque)
+    :param file: 打开日志生成的文件实例(TextIO)
+    :param log_path: 日志文件路径(str)
     :return line: f.readline对象
     """
     try:
@@ -22,7 +26,7 @@ def tail_log(log_path, file, buffer):
         # 将读取的一行内容追加到缓冲区
         buffer.append(line)
         # 若缓冲区过大，则丢弃最旧的数据
-        if len(buffer) > BUFFER_MAX_SIZE:
+        if len(buffer) > buffer_max_size:
             buffer.popleft()
         # 打印示例输出
         print(f"读取到日志行: {line}")

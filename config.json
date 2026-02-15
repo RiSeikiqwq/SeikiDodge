@@ -6,6 +6,7 @@
     "USER_NAME": "Name_in_game"
   },
   "capacities": {
+    "LISTEN_BUFFER": 250,
     "RECENT_QUEUE_RECORD": 5
   },
   "toggles": {

@@ -15,6 +15,8 @@ DEFAULT_CF = {
     "USER_NAME": "Name_in_game"
   },
   "capacities": {
+    # 监听缓冲区大小，用于丢弃旧数据
+    "LISTEN_BUFFER": 250,
     # 存储最近排队的双端队列容量，DodgeWhenEnterRecentQueue开启后，最近该次内加入过同一局排队自动执行逃逸
     "RECENT_QUEUE_RECORD": 5
   },
@@ -73,7 +75,7 @@ class RuntimeCfg:
 
 @dataclass
 class ListenCfg:
-    pass
+    LISTEN_BUFFER: int
 
 
 @dataclass

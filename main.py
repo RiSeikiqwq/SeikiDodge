@@ -18,7 +18,7 @@ cfg = Config(
         DodgeWhenPartyExit=config['toggles']['DodgeWhenPartyExit']
     ),
     listen=ListenCfg(
-
+        LISTEN_BUFFER=config['capacities']['LISTEN_BUFFER']
     ),
     process=ProcessCfg(
         USER_NAME=config['player']['USER_NAME'],
